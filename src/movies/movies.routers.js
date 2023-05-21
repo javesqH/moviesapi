@@ -8,6 +8,6 @@ router.post('/', moviesServices.postMovie);
 router.get('/:id', moviesServices.getMovieById);
 router.delete('/:id', moviesServices.deleteMovie);
 router.patch('/:id', moviesServices.patchMovie);
-//router.put('/:id'); 
+router.put('/:id', moviesServices.putMovie); 
 
 module.exports = router;

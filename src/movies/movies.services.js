@@ -1,3 +1,4 @@
+const { response } = require('express')
 const moviesControllers = require('./movies.controllers')
 
 const getAllMovies = (req, res) => {
@@ -76,10 +77,37 @@ const deleteMovie = (req, res) => {
     })
 }
 
+const putMovie = (req, res) => {
+    const id = req.params.id;
+    const { name, gender, duration, releaseDate} = req.body
+
+    if(name && gender && duration && releaseDate){
+        moviesControllers.editMovie(id, {name, gender, duration, releaseDate})
+            .then((response) => {
+                if(response[0]){
+                    res.status(200).json({message: `Movie with ID: ${id}, edited succesfully!`})
+                } else {
+                    res.status(404).json({message: 'Invalid ID'})
+                }
+            })
+            .catch(err => {
+                res.status(400).json({message: err.message})
+            })
+    } else {
+         res.status(400).json({message: 'Missing data', fields: {
+            name: 'string',
+            gender: 'string',
+            duration: 'integer',
+            releaseDate: 'YYYY/MM/DD'
+         }})
+    }
+}
+
 module.exports = {
     getAllMovies,
     getMovieById,
     postMovie,
     patchMovie,
-    deleteMovie
+    deleteMovie,
+    putMovie
 }
